@@ -147,13 +147,13 @@ watch(
 
   </div>
 
-  <DraggableWidget :threshold="30" style="width: 300px;">
+  <!-- <DraggableWidget :threshold="30" style="width: 300px;">
     <el-card>
       <template #header>
         <span>可拖拽组件</span>
       </template>
     </el-card>
-  </DraggableWidget>
+  </DraggableWidget> -->
 
 </template>
 

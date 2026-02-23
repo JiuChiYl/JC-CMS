@@ -61,33 +61,42 @@ const stopDrag = () => {
     window.removeEventListener('mousemove', onDrag)
     window.removeEventListener('mouseup', stopDrag)
 
-    // --- 自动吸附边缘逻辑 ---
+    // --- 自动吸附边缘逻辑（带10px边距）---
     const elWidth = draggableRef.value.offsetWidth
     const elHeight = draggableRef.value.offsetHeight
     const currentX = position.value.x
     const currentY = position.value.y
 
     // 计算到各边缘的距离
-    const distToLeft = currentX
-    const distToRight = window.innerWidth - (currentX + elWidth)
-    const distToTop = currentY
-    const distToBottom = window.innerHeight - (currentY + elHeight)
+    const distToLeft = currentX - 10  // 距离左边10px边距的距离
+    const distToRight = (window.innerWidth - 10) - (currentX + elWidth)  // 距离右边10px边距的距离
+    const distToTop = currentY - 10   // 距离上边10px边距的距离
+    const distToBottom = (window.innerHeight - 10) - (currentY + elHeight)  // 距离下边10px边距的距离
 
     let targetX = currentX
     let targetY = currentY
 
     // 水平方向吸附
-    if (distToLeft < props.threshold || distToRight < props.threshold) {
-        targetX = distToLeft < distToRight ? 0 : window.innerWidth - elWidth
+    if (Math.abs(distToLeft) < props.threshold || Math.abs(distToRight) < props.threshold) {
+        // 选择更近的边缘吸附
+        if (Math.abs(distToLeft) < Math.abs(distToRight)) {
+            targetX = 10  // 吸附到左边，留10px边距
+        } else {
+            targetX = window.innerWidth - elWidth - 10  // 吸附到右边，留10px边距
+        }
     }
 
     // 垂直方向吸附
-    if (distToTop < props.threshold || distToBottom < props.threshold) {
-        targetY = distToTop < distToBottom ? 0 : window.innerHeight - elHeight
+    if (Math.abs(distToTop) < props.threshold || Math.abs(distToBottom) < props.threshold) {
+        if (Math.abs(distToTop) < Math.abs(distToBottom)) {
+            targetY = 10  // 吸附到上边，留10px边距
+        } else {
+            targetY = window.innerHeight - elHeight - 10  // 吸附到下边，留10px边距
+        }
     }
 
     // 更新位置（加上平滑过渡）
-    position.value = { x: targetX , y: targetY }
+    position.value = { x: targetX, y: targetY }
 }
 
 // 清理事件监听
@@ -101,7 +110,7 @@ onUnmounted(() => {
         left: position.x + 'px',
         top: position.y + 'px'
     }" @mousedown="startDrag">
-    <slot></slot>
+        <slot></slot>
     </div>
 </template>
 <style scoped>

@@ -26,9 +26,16 @@ const version = ref([
         content: '理智补偿',
     },
 ]);
+
+const user = ref({
+    username: '久池鸢里',
+    uid: '1244769768',
+    avatar: 'img/vc2.png',
+    description:'这里是久池鸢里的简介，喜欢游戏，爱好编程摄影和绘画，请多多指教喵\n~( =•ω•= )m',
+});
 </script>
 <template>
     <VersionCalendar :version="version" title="明日方舟终末地 / 鸣潮版本日历" />
-    <UserColorCard style="margin-top: 20px; width: 445px;"/>
+    <UserColorCard style="margin-top: 20px; width: 510px;" :userInfo="user"/>
 </template>
 <style></style>

@@ -51,7 +51,6 @@
     </div>
 </template>
 <script setup>
-import { ca } from 'element-plus/es/locales.mjs';
 import { ref, defineProps, onMounted } from 'vue';
 const props = defineProps({
     BodyColor: {

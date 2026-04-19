@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 // 日历的起始和结束日期
 const StartDay = ref(dayjs().format('YYYY-MM-DD'));
-const EndDay = ref(dayjs().set('month', 3).set('date', 30).format('YYYY-MM-DD'));
+const EndDay = ref(dayjs().set('month', dayjs().format('MM')).set('date', 30).format('YYYY-MM-DD'));
 
 // 计算属性：生成从 StartDay 到 EndDay 的所有日期列表
 const dateList = computed(() => {
@@ -119,7 +119,9 @@ const versionItems = computed(() => {
                         {{ dayjs(item.start).format('MM.DD') }}
                         <i class="bi bi-clock-history"></i>
                     </div>
-                    {{ item.content }}
+                    <div class="version_content_item_content">
+                        {{ item.content }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -168,6 +170,11 @@ const versionItems = computed(() => {
 .version_content {
     /* 确保子元素的百分比宽度参照此容器 */
     width: 100%;
+}
+
+.version_content_item_content{
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .version_content_item {

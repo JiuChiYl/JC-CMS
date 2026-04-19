@@ -25,6 +25,11 @@ const version = ref([
         end: '2026-04-20',
         content: '理智补偿',
     },
+    {
+        start: '2026-04-17',
+        end: '2026-05-28',
+        content: '[春雷动，万物生] 特许寻访',
+    },
 ]);
 
 const user = ref({

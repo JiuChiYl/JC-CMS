@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <div class="description_btn " @click="description_btn_click"
+                <div class="description_btn " ref="user_colorCard_description_btn" @click="description_btn_click"
                     v-if="props.position_to && props.btn_position == 'center'" :style="{ right: btn_position }">
                     <i class="bi bi-chevron-compact-up" v-if="descriptionShow"></i>
                     <i class="bi bi-chevron-compact-down" v-else></i>
@@ -51,7 +51,8 @@
     </div>
 </template>
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ca } from 'element-plus/es/locales.mjs';
+import { ref, defineProps, onMounted } from 'vue';
 const props = defineProps({
     BodyColor: {
         type: Array,
@@ -97,28 +98,40 @@ switch (props.btn_position) {
         break;
 }
 
+
+
+const user_colorCard_description_btn = ref(null);
+const description_btn = ref(null);
+onMounted(() => {
+    description_btn.value = user_colorCard_description_btn.value;
+});
+
 const description_btn_click = () => {
     showDescription();
-    if (props.position_to === '') {
-        return;
-    } else if (props.position_to == 'right') {
-        description_btn_animation.value = !description_btn_animation.value;
-        if (description_btn_animation.value) {
-            document.querySelector('.description_btn').classList.add('description_btn_animation_show_right');
-            document.querySelector('.description_btn').classList.remove('description_btn_animation_hide_right');
-        } else {
-            document.querySelector('.description_btn').classList.remove('description_btn_animation_show_right');
-            document.querySelector('.description_btn').classList.add('description_btn_animation_hide_right');
-        }
-    } else if (props.position_to == 'left') {
-        description_btn_animation.value = !description_btn_animation.value;
-        if (description_btn_animation.value) {
-            document.querySelector('.description_btn').classList.add('description_btn_animation_show_left');
-            document.querySelector('.description_btn').classList.remove('description_btn_animation_hide_left');
-        } else {
-            document.querySelector('.description_btn').classList.remove('description_btn_animation_show_left');
-            document.querySelector('.description_btn').classList.add('description_btn_animation_hide_left');
-        }
+
+    description_btn_animation.value = !description_btn_animation.value;
+
+    switch (props.position_to) {
+        case 'right':
+            if (description_btn_animation.value) {
+                description_btn.value.classList.add('description_btn_animation_show_right');
+                description_btn.value.classList.remove('description_btn_animation_hide_right');
+            } else {
+                description_btn.value.classList.remove('description_btn_animation_show_right');
+                description_btn.value.classList.add('description_btn_animation_hide_right');
+            }
+            break;
+        case 'left':
+            if (description_btn_animation.value) {
+                description_btn.value.classList.add('description_btn_animation_show_left');
+                description_btn.value.classList.remove('description_btn_animation_hide_left');
+            } else {
+                description_btn.value.classList.remove('description_btn_animation_show_left');
+                description_btn.value.classList.add('description_btn_animation_hide_left');
+            }
+            break;
+        default:
+            return;
     }
 }
 
@@ -192,6 +205,7 @@ function showDescription() {
     white-space: nowrap; */
     margin: 5px 0;
     white-space: pre-wrap;
+    /* transition: all .3s cubic-bezier(0.56, 0.02, 1, 0.27); */
 }
 
 .description_btn {
@@ -212,11 +226,11 @@ function showDescription() {
 /* ------------------- 描述按钮动画 ------------------- */
 
 .description_btn_animation_show_right {
-    animation: description_btn_animation_right_show .5s cubic-bezier(0.56, 0.02, 1, 0.27) forwards;
+    animation: description_btn_animation_right_show .3s cubic-bezier(0.56, 0.02, 1, 0.27) forwards;
 }
 
 .description_btn_animation_hide_right {
-    animation: description_btn_animation_right_hide .5s cubic-bezier(0.56, 0.02, 1, 0.27) forwards;
+    animation: description_btn_animation_right_hide .3s cubic-bezier(0.56, 0.02, 1, 0.27) forwards;
 }
 
 @keyframes description_btn_animation_right_show {

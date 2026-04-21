@@ -8,8 +8,15 @@
                     <img :src="props.userInfo.avatar" width="100px" alt="">
                 </div>
                 <div class="user_info_content">
-                    <p class="user_name">{{ props.userInfo.username }}<i v-if="patchCheck"
-                            class="bi bi-patch-check-fill"></i></p>
+                    <p class="user_name">
+                        {{ props.userInfo.username }}
+                        <span v-if="$slots['patch-check_icon']">
+                            <slot name="patch-check_icon"></slot>
+                        </span>
+                        <span v-else>
+                            <i v-if="patchCheck" class="bi bi-patch-check-fill"></i>
+                        </span>
+                    </p>
                     <p class="user_uid">UID:{{ props.userInfo.uid }}</p>
                     <div class="user_tab">
                         <div class="user_tab_item"><i class="bi bi-gender-female"></i>天蝎座</div>
@@ -38,7 +45,7 @@
         </div>
         <div class="card-footer" :style="{ backgroundColor: props.FooterColor }">
             <!-- <slot></slot> -->
-            <div class="card_footer_icon">
+            <div class="card_footer_icon" :style="{ color: props.footer_icon_color }">
                 <!-- 社交图标 - 待设置链接 -->
                 <i class="bi bi-github"></i>
                 <i class="bi bi-twitter-x"></i>
@@ -60,6 +67,10 @@ const props = defineProps({
     FooterColor: {
         type: String,
         default: '#FFE5F9'
+    },
+    footer_icon_color: {
+        type: String,
+        default: '#B7B6FF'
     },
     userInfo: {
         type: Object,
@@ -289,12 +300,14 @@ function showDescription() {
     align-items: center;
 }
 
-.user_name i {
+.user_name span {
     margin-left: 5px;
     font-size: 18px;
     background-image: linear-gradient(-45deg, #FFE5F9, #B0DDFE);
     background-clip: text;
     color: transparent;
+    display: flex;
+    align-items: center;
 }
 
 .user_uid,
@@ -350,6 +363,6 @@ function showDescription() {
 
 .card_footer_icon i {
     margin: 5px 10px;
-    color: #B7B6FF;
+    /* color: #B7B6FF; */
 }
 </style>

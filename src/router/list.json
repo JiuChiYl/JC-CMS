@@ -5,7 +5,8 @@
     "CalendaryDate",
     "PageExpansion",
     "EditorPost",
-    "Setting"
+    "Setting",
+    "Photo"
   ],
   "component": [
     "Vecm",

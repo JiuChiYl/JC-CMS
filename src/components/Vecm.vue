@@ -1,6 +1,7 @@
 <script setup>
 import VersionCalendar from '@/components/more/VersionCalendar.vue';
 import UserColorCard from '@/components/more/userColorCard.vue';
+import GithubHeatmap from '@/components/more/GithubHeatmap.vue';
 import { ref } from 'vue';
 
 const version = ref([
@@ -41,6 +42,19 @@ const user = ref({
 </script>
 <template>
     <VersionCalendar :version="version" title="明日方舟终末地 / 鸣潮版本日历" />
-    <UserColorCard style="margin-top: 20px; width: 510px;" :userInfo="user" position_to="right" />
+
+
+
+    <UserColorCard style="margin-top: 20px; width: 510px;" :userInfo="user" position_to="right" >
+        <template #patch-check_icon>
+            <svg t="1776745004153" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5477" width="25" height="25"><path d="M511.957333 83.328c-57.984 0-108.288 27.818667-148.010666 69.333333-57.770667-1.28-114.005333 13.994667-154.666667 54.656-40.661333 40.661333-55.936 96.896-54.656 154.666667-41.514667 39.722667-69.333333 90.026667-69.333333 148.053333 0 57.941333 27.818667 108.245333 69.333333 147.968-1.28 57.770667 13.994667 114.005333 54.656 154.666667 40.661333 40.661333 96.896 55.978667 154.666667 54.656 39.722667 41.514667 90.026667 69.333333 148.010666 69.333333s108.288-27.818667 148.010667-69.333333c57.770667 1.28 114.005333-13.994667 154.666667-54.613333 40.661333-40.704 55.936-96.938667 54.656-154.709334 41.514667-39.68 69.333333-90.026667 69.333333-148.010666s-27.818667-108.288-69.333333-148.010667c1.28-57.770667-13.994667-114.005333-54.656-154.666667-40.661333-40.661333-96.896-55.978667-154.666667-54.613333-39.722667-41.557333-90.026667-69.376-148.010667-69.376z m128 298.666667c10.922667 0 22.357333 3.669333 30.677334 11.989333a43.946667 43.946667 0 0 1 0 61.354667l-170.666667 170.666666c-17.066667 16.64-44.288 16.64-61.354667 0l-85.333333-85.333333c-16.64-17.066667-16.64-44.288 0-61.354667a43.946667 43.946667 0 0 1 61.354667 0l54.656 54.656 139.989333-139.946666c8.362667-8.362667 19.754667-12.032 30.677333-12.032z" fill="#fae1eb" p-id="5478"></path></svg>
+        </template>
+    </UserColorCard>
+    
+    <UserColorCard style="margin-top: 20px; width: 510px;" :BodyColor="['#81b992','#09F']" FooterColor="#055489" footer_icon_color="#6eabd3" />
+
+    <!-- GitHub热力图 -->
+    <GithubHeatmap style="margin-top: 20px;" username="JiuChiYl" />
+
 </template>
 <style></style>

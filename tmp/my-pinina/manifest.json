@@ -1,0 +1,10 @@
+{
+  "name": "my-plugin",
+  "version": "1.0.0",
+  "description": "一个示例插件",
+  "author": "Developer",
+  "libraryName": "MyPlugin",
+  "entry": "index.js",
+  "permissions": ["router", "menu"],
+  "dependencies": {}
+}

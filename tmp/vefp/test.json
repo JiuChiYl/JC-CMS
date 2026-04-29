@@ -1,0 +1,16 @@
+{
+    "name":"test",
+    "expansion": [
+        {
+            "name":"a",
+            "vuePage":"Vecm"
+        },
+        {
+            "name":"b",
+            "vuePage":"Pgss"
+        }
+    ],
+    "auhor":"里子",
+    "version":"0.1.0",
+    "description":"这是一个测试文件"
+}

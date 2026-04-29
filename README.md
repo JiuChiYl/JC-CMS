@@ -19,10 +19,6 @@
 > * 组件拓展（及拓展功能）
 > * 撰写文章
 
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/b394fda5-04f6-4651-92bb-5f1db2fcabb0" />
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/cea19285-a11e-4262-95e4-847830efbe5d" />
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/b6ff1887-e25d-46aa-b9f6-c894e386efef" />
-
 
 
 # vue-project

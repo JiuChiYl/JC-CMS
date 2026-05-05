@@ -1,90 +1,148 @@
 <template>
-  <div class="photo">
-    <div class="search">
-      <div>
-        <el-input v-model="inputValue" class="search-input" placeholder="图片检索" @keydown="inputKeyDown"
-          :prefix-icon="Search" />
-        <el-button plain @click="filter" style="margin-left: 20px;" type="primary">
-          <span>筛选</span>
-          <el-icon class="el-icon--right">
-            <i class="bi bi-funnel"></i>
-          </el-icon>
-        </el-button>
-        <el-button plain type="success" class="btn-sty" @click="upload">
-          上传
-          <el-icon class="el-icon--right">
-            <i class="bi bi-cloud-arrow-up"></i>
-          </el-icon>
-        </el-button>
-      </div>
-      <div v-if="filterFlag" class="filter-sty">
-        <el-dropdown v-for="item in filterArr" :key="item.type" class="dropdown-sty"
-          @command="(command) => handleCommand(command, item.type)">
-          <span class="el-dropdown-link">
-            {{ item.name }}
-            <el-icon class="el-icon--right">
-              <arrow-down />
-            </el-icon>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item v-for="item2 in item.childer" :key="item2.key" :command="item2">{{ item2.value
-              }}</el-dropdown-item>
-            </el-dropdown-menu>
+  <el-config-provider :locale="zhCn">
+    <el-row :gutter="20">
+      <el-col :span="18">
+        <el-card shadow="never" :body-style="{ maxHeight: '905px', overflow: 'hidden' }">
+          <template #header>
+            <div class="search">
+              <div>
+                <el-input v-model="inputValue" class="search-input" placeholder="图片检索" @keydown="inputKeyDown"
+                  :prefix-icon="Search" />
+                <el-button plain @click="filter" style="margin-left: 20px;" type="primary">
+                  <span>筛选</span>
+                  <el-icon class="el-icon--right">
+                    <i class="bi bi-funnel"></i>
+                  </el-icon>
+                </el-button>
+              </div>
+              <div v-if="filterFlag" class="filter-sty">
+                <el-dropdown v-for="item in filterArr" :key="item.type" class="dropdown-sty"
+                  @command="(command) => handleCommand(command, item.type)">
+                  <span class="el-dropdown-link">
+                    {{ item.name }}
+                    <el-icon class="el-icon--right">
+                      <arrow-down />
+                    </el-icon>
+                  </span>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item v-for="item2 in item.childer" :key="item2.key" :command="item2">{{ item2.value
+                        }}</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
+            </div>
           </template>
-        </el-dropdown>
-      </div>
-    </div>
-    <div class="images">
-      <div v-for="(item, index) in imgArr" :key="index">
-        <div class="img-box">
-          <div class="img_info_size_box">
-            <!-- 分类 -->
-            <div class="img_info_item"><!-- 大小-->
-              <el-icon class="el-icon--left">
-                <i class="bi bi-aspect-ratio"></i>
-              </el-icon>
-              <span>{{ item.size }}</span>
-            </div>
-            <div class="img_info_item"><!-- 类型-->
-              <el-icon class="el-icon--left">
-                <i class="bi bi-card-image"></i>
-              </el-icon>
-              <span>{{ item.category }}</span>
-            </div>
-            <div class="img_info_item"><!-- 上传时间-->
-              <el-icon class="el-icon--left">
-                <i class="bi bi-clock"></i>
-              </el-icon>
-              <span>{{ item.uploadTime }}</span>
+          <div class="photo">
+            <div class="images">
+              <div v-for="(item, index) in imgArr" :key="index">
+                <div class="img-box">
+                  <div class="img_info_size_box">
+                    <!-- 分类 -->
+                    <div class="img_info_item"><!-- 大小-->
+                      <el-icon class="el-icon--left">
+                        <i class="bi bi-aspect-ratio"></i>
+                      </el-icon>
+                      <span>{{ item.size }}</span>
+                    </div>
+                    <div class="img_info_item"><!-- 类型-->
+                      <el-icon class="el-icon--left">
+                        <i class="bi bi-card-image"></i>
+                      </el-icon>
+                      <span>{{ item.category }}</span>
+                    </div>
+                    <div class="img_info_item"><!-- 上传时间-->
+                      <el-icon class="el-icon--left">
+                        <i class="bi bi-clock"></i>
+                      </el-icon>
+                      <span>{{ item.uploadTime }}</span>
+                    </div>
+                  </div>
+                  <img :src="item.url" alt="item.keyWords">
+                  <div class="img_btn_box">
+                    <el-button-group>
+                      <el-button plain color="#0099ff" class="btn_col" size="small">
+                        <el-icon class="el-icon--left">
+                          <Download />
+                        </el-icon>
+                        下载
+                      </el-button>
+                      <el-button plain color="#ff4949" class="btn_col" size="small">
+                        删除
+                        <el-icon class="el-icon--right">
+                          <Delete />
+                        </el-icon>
+                      </el-button>
+                    </el-button-group>
+                  </div>
+                </div>
+                <p>
+                  {{ item.title }}
+                </p>
+              </div>
             </div>
           </div>
-          <img :src="item.url" alt="item.keyWords">
-          <div class="img_btn_box">
-            <el-button-group>
-              <el-button plain color="#0099ff" class="btn_col" size="small">
-                <el-icon class="el-icon--left">
-                  <Download />
-                </el-icon>
-                下载
-              </el-button>
-              <el-button plain color="#ff4949" class="btn_col" size="small">
-                删除
-                <el-icon class="el-icon--right">
-                  <Delete />
-                </el-icon>
-              </el-button>
-            </el-button-group>
-          </div>
-        </div>
-        <p>
-          {{ item.title }}
-        </p>
-      </div>
-    </div>
-  </div>
+          <template #footer>
+            <el-pagination layout="total, prev, pager, next, jumper" :total="100" :page-size="10" :pager-count="4" />
+          </template>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card shadow="never">
+          <template #header>
+            <el-row :gutter="0">
+              <el-col :span="12">
+                <el-text type="success" size="large" style="padding: 4px 0px; display: block;">
+                  批量上传
+                  <el-icon class="el-icon--right">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                  </el-icon>
+                </el-text>
+              </el-col>
+              <el-col :span="12">
+                <el-button plain type="success" class="btn-sty" @click="upload">
+                  单独上传
+                  <el-icon class="el-icon--right">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                  </el-icon>
+                </el-button>
+              </el-col>
+            </el-row>
+          </template>
+          <el-upload v-model:file-list="fileList" action="" list-type="picture-card"
+            :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+            <el-icon>
+              <Plus />
+            </el-icon>
+          </el-upload>
+          <template #footer>
+            <el-text size="large" style="display: block;">
+              批量上传配置
+            </el-text>
+            <br>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-select v-model="value" placeholder="图片尺寸" style="width: 100%;">
+                  <!-- <el-option v-for="item in filterArr[0]" :key="item.key" :label="item.value" :value="item.value" /> -->
+                </el-select>
+              </el-col>
+              <el-col :span="12">
+                <el-select v-model="value" placeholder="图片类型" style="width: 100%;">
+                  <!-- <el-option v-for="item in filterArr[1]" :key="item.key" :label="item.value" :value="item.value" /> -->
+                </el-select>
+              </el-col>
+            </el-row>
+          </template>
+        </el-card>
+      </el-col>
+    </el-row>
+  </el-config-provider>
+
+
 </template>
 <script setup>
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { ref, reactive, onMounted } from 'vue'
 import { Search, Upload, Download, Delete, ArrowDown } from '@element-plus/icons-vue'
 import dayjs from 'dayjs';
@@ -92,6 +150,11 @@ const inputValue = ref('')
 const filterFlag = ref(false)
 const filterArr = reactive([])
 const imgArr = reactive([])
+
+const uploads = reactive({
+  size: '',
+  category: ''
+})
 // 输入框回车事件
 // 搜索
 const inputKeyDown = (e) => {
@@ -218,7 +281,7 @@ const initFilterList = () => {
 // 初始化-获取第一页图片数据
 // 模拟数据
 const initImages = () => {
-  for (let index = 0; index < 20; index++) {
+  for (let index = 0; index < 24; index++) {
     imgArr.push({
       name: '达妮娅',
       keyWords: '背景,达妮娅',
@@ -255,7 +318,8 @@ onMounted(() => {
 }
 
 .btn-sty {
-  margin-right: 20px;
+  /* margin-right: 20px; */
+  float: right;
 }
 
 .example-showcase .el-dropdown-link {
@@ -291,10 +355,11 @@ onMounted(() => {
 }
 
 .images {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   display: grid;
-  grid-gap: 10px 10px;
+  grid-gap: 0px 10px;
   grid-template-columns: auto auto auto auto auto auto;
+  justify-content: center;
 
   >div {
     text-align: center;

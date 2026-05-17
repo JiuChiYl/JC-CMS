@@ -8,7 +8,8 @@
     "user": "用户管理",
     "editorPost": "撰写文章",
     "postManage": "文章管理",
-    "photo": "图库管理"
+    "photo": "图库管理",
+    "dashboard": "仪表盘"
   },
   "moreExpansion": {
     "Vecm": "组件测试页",

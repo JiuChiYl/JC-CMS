@@ -6,7 +6,8 @@
     "PageExpansion",
     "EditorPost",
     "Setting",
-    "Photo"
+    "Photo",
+    "Dashboard"
   ],
   "component": [
     "Vecm",

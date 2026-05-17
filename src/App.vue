@@ -184,6 +184,13 @@ watch(backgroundBlur, (newVal, oldVal) => {
             </el-icon>
             <template #title>图库管理</template>
           </el-menu-item>
+          
+          <el-menu-item index="/dashboard">
+            <el-icon>
+              <i class="bi bi-speedometer"></i>
+            </el-icon>
+            <template #title>仪表盘</template>
+          </el-menu-item>
 
           <el-sub-menu v-if="Object.keys(titleMaps.moreExpansion).length > 0" index="2">
             <template #title>

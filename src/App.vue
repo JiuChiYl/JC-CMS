@@ -1,11 +1,136 @@
 <script setup>
-import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
+import { ref, watch, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import titleMaps from './titleMap.json'
 import DraggableWidget from '@/components/more/DraggableWidget.vue'
 import MusicTool from '@/components/more/MusicTool.vue'
+import axios from 'axios'
 
 import eventBus from '@/js/eventBus.js'
+
+
+
+
+
+const agent_say = ref('');
+const agent_think = ref(false);
+
+const agent_content = ref([]);
+const scrollbarRef = ref(null);
+
+const scrollTopFn = () => {
+  nextTick(() => {
+    const scrollTop = scrollbarRef.value.wrapRef;
+    scrollbarRef.value.setScrollTop(scrollTop.scrollHeight - scrollTop.clientHeight);
+  });
+}
+
+onMounted(async () => {
+  let gs = await axios.get('http://localhost:3553/api/context', {
+    params: {
+      "context": "cU7zCB_aRBa2.json"
+    }
+  });
+  agent_content.value = gs.data;
+  // 滚动到最底部
+  scrollTopFn();
+})
+
+const sendQuestion = async () => {
+  const userQuestion = agent_say.value.trim();
+  if (!userQuestion) return;
+
+  agent_content.value.push({
+    role: 'user',
+    content: userQuestion
+  });
+  scrollTopFn();
+
+  const aiMessage = {
+    role: 'assistant',
+    content: ''
+  }
+  agent_content.value.push(aiMessage);
+  agent_say.value = '';
+  scrollTopFn();
+
+  try {
+    // 使用 fetch 获取流式响应
+    const response = await fetch('http://localhost:3553/api/ai?' + new URLSearchParams({
+      context: "cU7zCB_aRBa2.json",
+      say: userQuestion
+    }));
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';  // 用于存储不完整的数据块
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      // 解码当前块并添加到缓冲区
+      buffer += decoder.decode(value, { stream: true });
+      
+      // 按行分割（SSE 通常用 \n 分隔）
+      const lines = buffer.split('\n');
+      
+      // 保留最后一行（可能不完整）
+      buffer = lines.pop() || '';
+      
+      for (const line of lines) {
+        // 处理以 "data:" 开头的行
+        if (line.startsWith('data:')) {
+          const dataStr = line.substring(5).trim(); // 去掉 "data:" 前缀
+          
+          if (dataStr === '[DONE]') {
+            continue;
+          }
+          
+          try {
+            const parsed = JSON.parse(dataStr);
+            const chunkContent = parsed.choices?.[0]?.delta?.content || '';
+            if (chunkContent) {
+              aiMessage.content += chunkContent;
+              // 强制更新视图
+              agent_content.value = [...agent_content.value];
+              scrollTopFn();
+            }
+          } catch (e) {
+            console.error('解析 JSON 失败:', e, dataStr);
+          }
+        }
+      }
+    }
+    
+    // 处理缓冲区剩余内容
+    if (buffer.startsWith('data:')) {
+      const dataStr = buffer.substring(5).trim();
+      if (dataStr !== '[DONE]') {
+        try {
+          const parsed = JSON.parse(dataStr);
+          const chunkContent = parsed.choices?.[0]?.delta?.content || '';
+          if (chunkContent) {
+            aiMessage.content += chunkContent;
+            agent_content.value = [...agent_content.value];
+            scrollTopFn();
+          }
+        } catch (e) {
+          console.error('解析剩余内容失败:', e);
+        }
+      }
+    }
+
+  } catch (e) {
+    console.error('请求失败:', e);
+    aiMessage.content = '抱歉，请求失败：' + e.message;
+    agent_content.value = [...agent_content.value];
+    scrollTopFn();
+  }
+}
+
+
+
 
 
 
@@ -84,6 +209,9 @@ watch(backgroundBlur, (newVal, oldVal) => {
     document.querySelector('.appBck').style.filter = `blur(0px)`;
   }
 });
+
+
+
 
 
 // ---------------------------------------------------------------------
@@ -184,7 +312,7 @@ watch(backgroundBlur, (newVal, oldVal) => {
             </el-icon>
             <template #title>图库管理</template>
           </el-menu-item>
-          
+
           <el-menu-item index="/dashboard">
             <el-icon>
               <i class="bi bi-speedometer"></i>
@@ -203,6 +331,13 @@ watch(backgroundBlur, (newVal, oldVal) => {
             </el-menu-item>
           </el-sub-menu>
 
+          <el-menu-item @click="">
+            <el-icon>
+              <i class="bi bi-stars"></i>
+            </el-icon>
+            <template #title>智能体</template>
+          </el-menu-item>
+
           <el-menu-item @click="menuShow = !menuShow">
             <el-icon v-if="menuShow">
               <Expand />
@@ -218,15 +353,71 @@ watch(backgroundBlur, (newVal, oldVal) => {
       <el-container>
         <el-header class="top_title bd_ui_lin" style="line-height: 60px;">{{ AppTiele }}</el-header>
         <el-divider class="divider_line"></el-divider>
+
         <el-main>
-          <RouterView v-slot="{ Component, route }">
-            <Transition name="fade" mode="out-in">
-              <div class="rv-box" v-if="Component" :key="route.matched[0]?.path"> <!--Key是是否能分开动画的关键-->
-                <component :is="Component" />
-              </div>
-            </Transition>
-          </RouterView>
+          <el-row :gutter="15">
+            <el-col :span="18">
+              <RouterView v-slot="{ Component, route }">
+                <Transition name="fade" mode="out-in">
+                  <div class="rv-box" v-if="Component" :key="route.matched[0]?.path"> <!--Key是是否能分开动画的关键-->
+                    <component :is="Component" />
+                  </div>
+                </Transition>
+              </RouterView>
+            </el-col>
+            <el-col :span="6">
+              <el-card class="agent_box">
+                <template #header>
+                  <!-- <el-icon class="el-icon el-icon--left"><i class="bi bi-stars"></i></el-icon> -->
+                  <el-text>询问智能体</el-text>
+                </template>
+
+                <el-scrollbar ref="scrollbarRef">
+                  <div v-for="(msg, index) in agent_content" :key="index">
+                    <div class="agent_msg_item"
+                      :class="msg.role === 'assistant' ? 'agent_assistant_msg' : 'agent_user_msg'"
+                      v-if="msg.role !== 'system'">
+
+                      <el-icon class="el-icon el-icon--left" v-if="msg.role === 'assistant'">
+                        <i class="bi bi-stars"></i>
+                      </el-icon>
+                      <div class="agent_msg_content">
+                        {{ msg.content }}
+                      </div>
+
+                    </div>
+                  </div>
+                </el-scrollbar>
+
+                <template #footer>
+                  <div class="think_bt" @click="agent_think = !agent_think" :class="{ 'think_bt_active': agent_think }">
+                    <el-icon class="el-icon el-icon--left">
+                      <i class="bi bi-boxes"></i>
+                    </el-icon>
+                    <span>深度思考</span>
+                  </div>
+                  <el-input placeholder="请输入问题" clearable v-model="agent_say">
+                    <template #prefix>
+                      <el-icon>
+                        <span :class="['icon__inner_bck', agent_think ? 'icon__inner_bck_think' : 'icon__inner_bck_f']">
+                          <i class="bi bi-stars"></i>
+                        </span>
+                      </el-icon>
+                    </template>
+                    <template #append>
+                      <el-button type="primary" size="mini" @click="sendQuestion">
+                        <el-icon color="#0099ff"><i class="bi bi-send"></i></el-icon>
+                      </el-button>
+                    </template>
+                  </el-input>
+                </template>
+              </el-card>
+            </el-col>
+          </el-row>
         </el-main>
+
+
+
       </el-container>
     </el-container>
     <div class="appBck"></div>
@@ -291,10 +482,12 @@ watch(backgroundBlur, (newVal, oldVal) => {
   position: relative;
   overflow: hidden;
 }
-#userBox:hover::after{
+
+#userBox:hover::after {
   filter: blur(5px);
 }
-#userBox::after{
+
+#userBox::after {
   position: absolute;
   content: '';
   bottom: 0;
@@ -303,8 +496,7 @@ watch(backgroundBlur, (newVal, oldVal) => {
   height: 5px;
 
   background: linear-gradient(90deg,
-  red 0%,red 20%
-  ,yellow 10%,yellow 40%,#09f 10%);
+      red 0%, red 20%, yellow 10%, yellow 40%, #09f 10%);
   filter: blur(10px);
 
   transition: all 0.3s ease-in-out;
@@ -313,5 +505,65 @@ watch(backgroundBlur, (newVal, oldVal) => {
 .userBox_it_show {
   margin: 10px;
   border-radius: 5px;
+}
+
+.agent_box {
+  height: calc(100vh - 115px);
+  width: calc(100% - 77%);
+  box-sizing: border-box;
+  position: fixed;
+}
+
+.icon__inner_bck {
+  transition: all .3s ease-in-out;
+  background-clip: text;
+  color: transparent;
+}
+
+.icon__inner_bck_f {
+  background-color: #09f;
+}
+
+.icon__inner_bck_think {
+  /* background-image: linear-gradient(129deg, red 0%, red 0%, #b7bc1a 50%, #b7bc1a 40%, #09f 80%); */
+  background-color: red;
+}
+
+.think_bt {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #c9c9c9;
+  width: max-content;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+  color: #828282;
+}
+
+.think_bt_active {
+  background-color: #0099ff2b;
+  border-color: #0099ff;
+  color: #09f;
+}
+
+.think_bt span {
+  font-size: 14px;
+}
+
+.agent_msg_item {
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  max-width: 100%;
+  word-wrap: break-word;
+  border: 1px solid #c9c9c9;
+}
+
+.agent_assistant_msg {
+  background-color: #0099ff2b;
+}
+
+.agent_user_msg {
+  background-color: #f5f5f5;
 }
 </style>

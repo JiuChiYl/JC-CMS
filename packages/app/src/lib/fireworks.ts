@@ -1,3 +1,5 @@
+import anime from 'animejs'
+
 const fireworksCanvas = document.querySelector('.fireworks') as HTMLCanvasElement
 const ctx = fireworksCanvas.getContext('2d')!
 
@@ -114,10 +116,11 @@ function createCircle(x: number, y: number): Circle {
   }
 }
 
-function renderParticle(anim: anime.AnimeInstance & { animatables: anime.Animatable[] }): void {
+function renderParticle(anim: anime.AnimeInstance): void {
   anim.animatables.forEach((animatable) => {
-    if (typeof animatable.target.draw === 'function') {
-      animatable.target.draw()
+    const target = animatable.target as unknown as Particle | Circle
+    if (typeof target.draw === 'function') {
+      target.draw()
     }
   })
 }

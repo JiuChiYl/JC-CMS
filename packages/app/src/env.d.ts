@@ -21,26 +21,3 @@ interface Window {
     setPaused: (isPaused: boolean) => void
   }
 }
-
-declare const anime: {
-  (params: Record<string, unknown>): anime.AnimeInstance
-  timeline(params: Record<string, unknown>): anime.AnimeTimelineInstance
-  random(min: number, max: number): number
-}
-
-declare namespace anime {
-  interface AnimeInstance {
-    play(): void
-    pause(): void
-  }
-
-  interface AnimeTimelineInstance {
-    add(params: Record<string, unknown>, offset?: number | string): AnimeTimelineInstance
-  }
-
-  interface Animatable {
-    target: {
-      draw?: () => void
-    }
-  }
-}

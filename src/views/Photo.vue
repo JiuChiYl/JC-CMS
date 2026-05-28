@@ -146,6 +146,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { ref, reactive, onMounted } from 'vue'
 import { Search, Upload, Download, Delete, ArrowDown } from '@element-plus/icons-vue'
 import dayjs from 'dayjs';
+// import { ajax } from '@/api/index';
 const inputValue = ref('')
 const filterFlag = ref(false)
 const filterArr = reactive([])
@@ -194,6 +195,7 @@ const handleCommand = (command, type) => {
 }
 // 初始化-获取筛选条件列表
 const initFilterList = () => {
+  // ajax.getFilterData()
   filterArr.push(
     {
       name: '图片尺寸',

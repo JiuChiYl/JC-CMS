@@ -1,45 +1,20 @@
 {
-  "name": "vue-project",
+  "name": "jc-cms-frontend",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "server_test": "node ./public/Server.js",
-    "deploy": "npm run build && gh-pages -d dist"
-  },
-  "dependencies": {
-    "@element-plus/icons-vue": "^2.3.2",
-    "@wangeditor/editor": "^5.1.23",
-    "@wangeditor/editor-for-vue": "^5.1.12",
-    "axios": "^1.16.1",
-    "bootstrap-icons": "^1.13.1",
-    "cors": "^2.8.6",
-    "element-plus": "^2.13.1",
-    "express": "^5.2.1",
-    "jszip": "^3.10.1",
-    "mitt": "^3.0.1",
-    "multer": "^2.0.2",
-    "pinia": "^3.0.4",
-    "prismjs": "^1.30.0",
-    "vue": "^3.5.26",
-    "vue-echarts": "^8.0.1",
-    "vue-router": "^4.6.4",
-    "vue3-draggable-resizable": "^1.6.5"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.3",
-    "gh-pages": "^6.3.0",
-    "unplugin-auto-import": "^21.0.0",
-    "unplugin-vue-components": "^31.0.0",
-    "vite": "^7.3.1",
-    "vite-plugin-vue-devtools": "^8.0.5",
-    "@antfu/eslint-config": "^9.0.0",
-    "eslint": "^10.3.0"
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
-  }
+  },
+  "packageManager": "pnpm@10.12.1"
 }

@@ -8,7 +8,7 @@ import type { VersionItem, UserInfo } from '@jc-cms/shared'
 const version = ref<VersionItem[]>([
   { start: '2026-03-18', end: '2026-04-28', content: '新潮起-故渊离' },
   { start: '2026-03-26', end: '2026-05-28', content: '拓影丰碑' },
-  { start: '2026-04-09', end: '2026-05-28', content: '共鸣者前瞻', background: 'img/bck1.png' },
+  { start: '2026-04-09', end: '2026-05-28', content: '共鸣者前瞻', background: new URL('@/assets/img/bck1.png', import.meta.url).href },
   { start: '2026-04-08', end: '2026-04-20', content: '理智补偿' },
   { start: '2026-04-17', end: '2026-05-28', content: '[春雷动，万物生] 特许寻访' },
 ])
@@ -16,7 +16,7 @@ const version = ref<VersionItem[]>([
 const user = ref<UserInfo>({
   username: '久池鸢里',
   uid: '1244769768',
-  avatar: 'img/vc2.png',
+  avatar: new URL('@/assets/img/vc2.png', import.meta.url).href,
   description: '这里是久池鸢里的简介，喜欢游戏，爱好编程摄影和绘画，请多多指教喵\n~( =•ω•= )m',
 })
 </script>

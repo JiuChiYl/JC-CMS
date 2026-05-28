@@ -111,7 +111,7 @@ const initImages = () => {
       name: '达妮娅',
       keyWords: '背景,达妮娅',
       title: '精选背景图片',
-      url: './img/bck1.png',
+      url: new URL('@/assets/img/bck1.png', import.meta.url).href,
       uploadTime: dayjs().format('YYYY-MM-DD'),
       size: '中',
       category: '绘画',

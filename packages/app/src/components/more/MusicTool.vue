@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-const avatar_url = ref('img/f8e3dc529a2e6727c7523aa610391cc11104997814.png')
+const avatar_url = ref(new URL('@/assets/img/f8e3dc529a2e6727c7523aa610391cc11104997814.png', import.meta.url).href)
 const musicList_flag = ref(false)
 const m_setting = ref(false)
 

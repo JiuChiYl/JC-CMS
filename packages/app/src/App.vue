@@ -148,7 +148,7 @@ function act() {
 }
 
 const size = ref(40)
-const circleUrl = ref('./img/731ac3e8e6dd38c397bbab65b0197a171862641106.png')
+const circleUrl = ref(new URL('@/assets/img/731ac3e8e6dd38c397bbab65b0197a171862641106.png', import.meta.url).href)
 const userName = ref('里子')
 
 watch(

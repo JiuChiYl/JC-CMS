@@ -1,0 +1,41 @@
+{
+  "name": "@jc-cms/app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit",
+    "deploy": "pnpm build && gh-pages -d dist"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@jc-cms/shared": "workspace:*",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
+    "animejs": "3.2.2",
+    "axios": "^1.16.1",
+    "bootstrap-icons": "^1.13.1",
+    "dayjs": "^1.11.13",
+    "echarts": "^5.6.0",
+    "element-plus": "^2.13.1",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.26",
+    "vue-echarts": "^8.0.1",
+    "vue-router": "^4.6.4",
+    "vue3-draggable-resizable": "^1.6.5"
+  },
+  "devDependencies": {
+    "@types/animejs": "^3.1.13",
+    "@types/node": "^22.15.29",
+    "@vitejs/plugin-vue": "^6.0.3",
+    "gh-pages": "^6.3.0",
+    "typescript": "^5.8.3",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-vue-components": "^31.0.0",
+    "vite": "^7.3.1",
+    "vue-tsc": "^2.2.10"
+  }
+}

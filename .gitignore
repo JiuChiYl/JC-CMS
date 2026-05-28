@@ -14,6 +14,8 @@ dist
 dist-ssr
 coverage
 *.local
+.vite
+.pnpm-store
 
 # Editor directories and files
 .vscode/*
@@ -29,9 +31,19 @@ coverage
 
 .eslintcache
 
+# Turbo
+.turbo
+
 # Cypress
 /cypress/videos/
 /cypress/screenshots/
 
 # Vitest
 __screenshots__/
+
+# Server uploads
+uploads/
+img/
+
+# Old source (moved to packages/)
+/src/

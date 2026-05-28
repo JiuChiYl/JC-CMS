@@ -1,8 +1,8 @@
 <script setup>
 import { ref, watch } from 'vue'
-import eventBus from '@/js/eventBus.js'
+import eventBus from '@/lib/eventBus.js'
 // 引入烟花效果js文件
-import { handleMouseDown } from '@/js/fireworks.js'
+import { handleMouseDown } from '@/lib/fireworks.js'
 
 // ---------------------------------------------------------------------
 const mouseDownEffect = ref(false);

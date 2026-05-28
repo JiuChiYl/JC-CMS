@@ -6,7 +6,7 @@ import DraggableWidget from '@/components/more/DraggableWidget.vue'
 import MusicTool from '@/components/more/MusicTool.vue'
 import axios from 'axios'
 
-import eventBus from '@/js/eventBus.js'
+import eventBus from '@/lib/eventBus.js'
 
 
 

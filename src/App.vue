@@ -566,4 +566,7 @@ watch(backgroundBlur, (newVal, oldVal) => {
 .agent_user_msg {
   background-color: #f5f5f5;
 }
+  .agent_msg_content{
+  white-space: pre-line;
+}
 </style>
